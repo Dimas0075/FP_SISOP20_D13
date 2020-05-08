@@ -28,6 +28,30 @@ void head(int fd, char *name, int x) {
   //printf(1,"file : %s\n", name);
 }
 
+void head2(int fd, char *name, int x) {
+  int n,line=0;
+  int i;
+  
+  while((n = read(fd, buf, sizeof(buf))) > 0 && line<x) {
+    for(i=0; i<=n && line<x; i++) {
+      printf(1,"%c",buf[i]);
+      if(buf[i]=='\n') {
+        line++;
+      }
+      else {
+      	line++;
+      }
+    }
+  }
+  if(n<0) {
+    printf(1, "HEAD: READ ERROR\n");
+    exit();
+  }
+  //printf(1,"file : %s\n", name);
+}
+
+
+
 int main(int argc, char *argv[]) {
   int fd,i;
   
@@ -83,7 +107,16 @@ int main(int argc, char *argv[]) {
     } 
     
     else if (strcmp(argv[1],"-c") == 0){
-	      printf(1,"belum bisa");
+	
+      int h = atoi(argv[2]);
+      for(i = 3; i < argc; i++) {
+        if((fd = open(argv[i], 0)) < 0) {
+          printf(1, "HEAD : CAN'T OPEN %s\n", argv[i]);
+          exit();
+        }
+        head2(fd, argv[i], h);
+        close(fd);
+    	}  
 	  }
 
   else if (strcmp(argv[1],"-q") == 0){
